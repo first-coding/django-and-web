@@ -9,3 +9,6 @@ by the way,The repository is full of front-end code,and The Django deployment si
 if you need project and run,you need to have Django and the front-end on the same LAN
 
 There are some bugs in this project,please bear with me
+
+third director is django file
+first/first/web director is web file
