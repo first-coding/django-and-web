@@ -13,12 +13,6 @@ import re
 import pandas as pd
 import matplotlib.pyplot as plt
 import warnings
-global num
-num = 1
-global work
-work='python'
-global pages
-page=1
 
 warnings.simplefilter('ignore')
 def jinrongspider(request):
@@ -376,7 +370,8 @@ def pagenumber(request):
     return JsonResponse(number,json_dumps_params={'ensure_ascii': False}, safe=False)
 
 class Get_data():
-    def __init__(self,jok,page):
+    def __init__(self,jok,page,work):
+        self.work=work
         self.jok = jok
         self.page = page
         self.header = {
@@ -392,7 +387,6 @@ class Get_data():
         self.requirement_list = []  # 要求
         self.become_a_regular_regular_worker = []
     def get_url(self):
-
         try:
             for pa in range(1,int(self.page)+1):
                 url = 'https://www.shixiseng.com/interns?page={}&type=intern&keyword={}&area=&months=&days=&degree=&official=&enterprise=&salary=-0&publishTime=&sortType=&city=%E5%85%A8%E5%9B%BD&internExtend='.format(pa,self.jok)
@@ -442,6 +436,7 @@ class Get_data():
         except:
             print('结束')
     def store_data(self):
+        work = self.work
         job_name =self.jok_name_list
         salary = self.salary_list
         education = self.education_list
@@ -462,15 +457,19 @@ class Get_data():
         }
         import pandas as pd
         df =pd.DataFrame(data)
-        df.to_csv('../../data/{}招聘信息.csv'.format(work),index=False)
+        df.to_csv('./data/{}招聘信息.csv'.format(work),index=False)
         return df
 
 
 class analysis():
-    def main(self,data, word):
+    def __init__(self,data,word):
+        self.data=data
+        self.word=word
+    def main(self):
         # 筛选
+        data = self.data
+        word = self.word
         data_new = data[data['岗位'].str.contains(word)]
-
         # 绘图
         education = data_new.groupby('学历要求').size()
         plt.rcParams['font.sans-serif'] = ['SimHei']
@@ -481,7 +480,7 @@ class analysis():
         plt.subplot(1, 2, 2)
         plt.title('{}岗位'.format(word))
         plt.pie(education.values, labels=education.index, autopct='%.2f%%')
-        plt.show()
+        plt.savefig('./static/img/{}学历要求.png'.format(word))
 
 
         work_place = data_new.groupby(by='上班地点').size().sort_values(ascending=False).head(5)
@@ -491,7 +490,8 @@ class analysis():
         plt.subplot(1, 2, 2)
         plt.title('{}岗位'.format(word))
         plt.pie(work_place.values, labels=work_place.index, autopct='%.2f%%')
-        plt.show()
+        plt.savefig('./static/img/{}上班地点.png'.format(word))
+        # plt.show()
 
         def zh(x):
             if x=='面议':
@@ -512,7 +512,7 @@ class analysis():
         zz_str = ''.join(list(analysis_duty['职责']))
         cut = jieba.lcut_for_search(duty_str)
         cut1 = jieba.lcut_for_search(zz_str)
-        stopword = pd.read_csv('../../data/work_word.txt', sep='bingrong', header=None, encoding='utf-8')
+        stopword = pd.read_csv('./data/work_word.txt', sep='bingrong', header=None, encoding='utf-8')
         # 去停用词
         stop = stopword.values
         stop = stop.ravel()
@@ -526,8 +526,8 @@ class analysis():
         import imageio
         st = ' '.join(cut)
         st1 = ' '.join(cut1)
-        back_color = imageio.imread('../../data/duihuakuan.jpg')
-        back_color1 = imageio.imread('../../data/duihuakuan.jpg')
+        back_color = imageio.imread('./data/1.jpg')
+        back_color1 = imageio.imread('./data/1.jpg')
         w = WordCloud(
             font_path='simhei.ttf',
             background_color='white',
@@ -540,8 +540,8 @@ class analysis():
         )
         w.generate(st)
         w1.generate(st1)
-        w.to_file('../../data/{}要求.png'.format(word))
-        w1.to_file('../../data/{}职责.png'.format(word))
+        w.to_file('./static/img/{}要求.png'.format(word))
+        w1.to_file('./static/img/{}职责.png'.format(word))
 
         return Max,Min, Mean
 
@@ -553,6 +553,7 @@ def usemain(request):
     page=request.GET.get("page")
     if work == "计算机科学与技术":
         work="软件开发"
+    # print(num,work,page)
     mains(num,work,page)
     ssss = {
         'data': "qwer"
@@ -560,19 +561,18 @@ def usemain(request):
     return JsonResponse(ssss, json_dumps_params={'ensure_ascii': False}, safe=False)
 
 def mains(num,work,page):
+    num = num
+    work = work
+    page = page
     print(num)
     print(work)
     print(page)
-    num = num
-    print(num)
     if num =='1':
         header = {
                 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36 Edg/101.0.1210.39',
                 'cookie': 'gr_user_id=0f3bb2ed-acd9-454d-80aa-457d6e6def6a; RANGERS_SAMPLE=0.014220170471998417; RANGERS_WEB_ID=usr_b6ythlwgcp7u; utm_campaign=baidusem; utm_source=sem-baidu-pc-pinpai-4; utm_source_first=sem-baidu-pc-pinpai-4; gr_cs1_61ce3d36-ac25-4b76-99f1-2805ed1fedaf=user_id%3Anull; SXS_XSESSION_ID=2|1:0|10:1652057629|15:SXS_XSESSION_ID|88:ZDJjNDk5ZWY1NWRhZTFmM2Q4Yjg0YjcxMDljM2ZlMzU2Yzc2M2ZiNjg1ZjMyNjFmZDAyMzI3NDVjNTZmZmVkYg==|f9ef6cbae28991bc043bcce5673609825c03d669297fd01bab664681184c4e89; SXS_XSESSION_ID_EXP=2|1:0|10:1652057629|19:SXS_XSESSION_ID_EXP|16:MTY1NDY0OTYyOQ==|7c05a3624f0f3809a4c454ce2abfba257e410a0b718337dcecb04c7c14f781b2; affefdgx=usr_b6ythlwgcp7u; sxs_usr=2|1:0|10:1652057629|7:sxs_usr|24:dXNyX2I2eXRobHdnY3A3dQ==|2f18f904a2ff28e68f4f9fc81cfd7df45ac84415f0dd5723c964f542be474ed4; xyz_usr=2|1:0|10:1652057629|7:xyz_usr|40:bzhSbncwQzRidWhXZ0pmZjNzT3BjbnhsN1NESQ==|b09faeaa5939fc219b4ecedcfd348bf31866a67f27310a921520fa8c8c6e9664; userflag=user; gr_session_id_96145fbb44e87b47=e2fe117f-0b19-4333-b32c-d0a47dbb7fad; gr_cs1_e2fe117f-0b19-4333-b32c-d0a47dbb7fad=user_id%3Ausr_b6ythlwgcp7u; Hm_lvt_03465902f492a43ee3eb3543d81eba55=1649934610,1652057631; gr_session_id_96145fbb44e87b47_e2fe117f-0b19-4333-b32c-d0a47dbb7fad=true; adCloseOpen=true; Hm_lpvt_03465902f492a43ee3eb3543d81eba55=1652058027'
                 }
         work=work
-        print(work)
-        # global work
         work_urlencode = urllib.parse.quote(work)
         url = 'https://www.shixiseng.com/interns?page=1&type=intern&keyword={}&area=&months=&days=&degree=&official=&enterprise=&salary=-0&publishTime=&sortType=&city=%E5%85%A8%E5%9B%BD&internExtend='.format(work_urlencode)
         response = requests.get(url,header).text
@@ -580,26 +580,26 @@ def mains(num,work,page):
         print('共有',data_HTML.xpath('//*[@id="__layout"]/div/div[2]/div[2]/div[1]/div[1]/div[2]/div/ul/li[8]/text()')[0],'页')
         page=page
         # 实例化对象
-        porgram = Get_data(work_urlencode, page)
-        porgram.get_url()
-
+        first = Get_data(work_urlencode, page,work)
+        first.get_url()
+        first.store_data()
         print('进行数据分析')
-        data = pd.read_csv('../../data/{}招聘信息.csv'.format(work))
-        Analysis = analysis()
-        Analysis.main(data,work)
+        data = pd.read_csv('./data/{}招聘信息.csv'.format(work))
+        Analysis = analysis(data,work)
+        Analysis.main()
         # 返回薪资三个值
-        print(Analysis.main(data, work))
         ssss ={
             'data':"ok"
         }
         return JsonResponse(ssss,json_dumps_params={'ensure_ascii': False}, safe=False)
+
     else:
-        Analysis = analysis()
+
         word = input('岗位名：')
-        data = pd.read_csv('../../data/{}招聘信息.csv'.format(word))
-        Analysis.main(data, word)
+        data = pd.read_csv('./data/{}招聘信息.csv'.format(word))
+        Analysis = analysis(data,word)
+        Analysis.main()
         #返回薪资三个值
-        print(Analysis.main(data, word))
         sssss ={
             'data':"error"
         }
