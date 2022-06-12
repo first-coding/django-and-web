@@ -11,10 +11,10 @@ if you need project and run,you need to have Django and the front-end on the sam
 There are some bugs in this project,please bear with me
 
 # file path
-third director is django file
+Third director is django file
 first/first/web director is web file
 
 # run
 The web file need environment in the vscode,you can use Extensions "Live Server" to start web project.by the way,you should change .html run path.
 
-The django you only use command "python manage.py runserver",but you should install django package and stay same path with manage.py.
+The django start that you only need use command "python manage.py runserver",but you should install django package and stay same path with manage.py.
