@@ -481,6 +481,7 @@ class analysis():
         plt.title('{}岗位'.format(word))
         plt.pie(education.values, labels=education.index, autopct='%.2f%%')
         plt.savefig('./static/img/{}学历要求.png'.format(word))
+        plt.close()
 
 
         work_place = data_new.groupby(by='上班地点').size().sort_values(ascending=False).head(5)
@@ -617,11 +618,3 @@ def imgg(request):
     }
     print(data)
     return JsonResponse(data,json_dumps_params={'ensure_ascii': False}, safe=False)
-    # imagepath = "static/C程序设计语言.jpg"
-    # image_data = open(imagepath,"rb").read()
-    # return HttpResponse(image_da
-    # ta,content_type='image/jpg')
-
-
-# def im(request,image_data):
-#     return HttpResponse(image_data,content_type='image/jpg')
