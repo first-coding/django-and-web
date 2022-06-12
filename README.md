@@ -17,4 +17,7 @@ first/first/web director is web file
 # run
 The web file need environment in the vscode,you can use Extensions "Live Server" to start web project.by the way,you should change .html run path.
 
-The django start that you only need use command "python manage.py runserver",but you should install django package and stay same path with manage.py.
+To start a Django file,simple run the "python manage.py runserver" command.but you should install django package and stay same path with manage.py.
+
+# other 
+Other html file are crawler generated file that you don't need to worry about,you just have to focus on the files in the third and first folders
