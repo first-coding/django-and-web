@@ -47,8 +47,8 @@ if (data == '计算机科学与技术') {
         change(res.data, data)
         lesson(res.data.Class, data, res.data.classurl)
         intro(res.data.intro[0], data)
-        analysis()
     })
+    analysis()
 }
 
 if (data == '管理') {
@@ -58,30 +58,31 @@ if (data == '管理') {
         change(res.data, data)
         lesson(res.data.Class, data, res.data.classurl)
         intro(res.data.intro[0], data)
-        analysis()
     })
+    analysis()
 }
 
 if (data == '英语') {
+    //url is django address
     axios.get('http://172.20.10.3:8000/app/english').then(res => {
         var data = decodeURI(location.search.substr('1',).split('=')[1])
         console.log(res.data)
         change(res.data, data)
         lesson(res.data.Class, data, res.data.classurl)
         intro(res.data.intro[0], data)
-        analysis()
     })
+    analysis()
 }
 
 if (data == '经济学') {
-    axios.get('http://172.20.10.3:8000/app/economys').then(res => {
+    axios.get('http://127.0.0.1:8000/app/economys').then(res => {
         var data = decodeURI(location.search.substr('1',).split('=')[1])
         // console.log(res.data.Class)
         change(res.data, data)
         lesson(res.data.Class, data, res.data.classurl)
         intro(res.data.intro[0], data)
-        analysis()
     })
+    analysis()
 }
 
 
@@ -161,16 +162,64 @@ function intro(introsss, data) {
 }
 
 
+function analysis(){
+    thirds = document.getElementById('third')
+    middless = document.getElementById('middle')
+    thirds.onclick=function(){
+        console.log(thirds)
+        form = document.createElement('form')
+        input_1 = document.createElement('input')
+        input_2 = document.createElement('input')
+        input_3 = document.createElement('input')
+        button = document.createElement('button')
+        button.setAttribute('id','button1');
+        form.setAttribute('method','get');
+        button.setAttribute('type','button')
+        middless.appendChild(form)
+        form.appendChild(input_1)
+        form.appendChild(input_2)
+        form.appendChild(input_3)
+        form.appendChild(button)
+        let texts = document.createTextNode('分析')
+        button.appendChild(texts)
+        form.appendChild(button)
+        button1.onclick=function(){
+            value_1 = input_1.value
+            value_2 = input_2.value
+            value_3 = input_3.value
+            axios.get('http://127.0.0.1:8000/app/usemain?num='+value_1+'&work='+value_2+'&page='+value_3).then(res => {
+                console.log(res)
+                
+                if(res!='NULL'){
+                    middless.innerHTML = ""
+                    img1 = document.createElement('img')
+                    img2 = document.createElement('img')
+                    img3 = document.createElement('img')
+                    img4 = document.createElement('img')
+                    img1.src="http://127.0.0.1:8000/static/img/"+value_2 + "上班地点.png"
+                    img2.src="http://127.0.0.1:8000/static/img/"+value_2 + "学历要求.png"
+                    img3.src="http://127.0.0.1:8000/static/img/"+value_2 + "职责.png"
+                    img4.src="http://127.0.0.1:8000/static/img/"+value_2 + "要求.png"
+                    img1.style.width="350px"
+                    img1.style.height="350px"
+                    img1.style.marginLeft="70px"
+                    img1.style.marginTop="50px"
+                    img2.style.width="350px"
+                    img2.style.height="350px"
+                    img2.style.marginLeft="10px"
+                    img3.style.width="350px"
+                    img3.style.height="350px"
+                    img3.style.marginLeft="10px"
+                    img4.style.width="350px"
+                    img4.style.height="350px"
+                    img4.style.marginLeft="10px"
+                    middless.appendChild(img1)
+                    middless.appendChild(img2)
+                    middless.appendChild(img3)
+                    middless.appendChild(img4)
+                }
+            })
 
-
-
-function analysis() {
-    // var  analysiss =  document.getElementById('analysis')
-    var thirdsss = document.getElementById('third')
-    var ims = document.getElementById('imgs')
-    var middlessss = document.getElementById('middle')
-    thirdsss.onclick=function(){
-        middlessss.innerHTML=""
-    ims.removeAttribute("hidden")
+        }
     }
 }
