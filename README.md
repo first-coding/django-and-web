@@ -1,5 +1,5 @@
 # django-and-web
-This is a django and Web front - and back -end separation project.
+This is a django and Web front - and back -end separation project.。
 
 # Introduce
 The topic of this project  is  professional analysis,which  can  help  them get employed.
