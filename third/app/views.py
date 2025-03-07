@@ -256,6 +256,7 @@ def yuyanspider(request):
     print(len(sm8))
 
     return JsonResponse("ok", json_dumps_params={'ensure_ascii': False}, safe=False)
+#前面这一部分都是爬虫，实际没什么用，就是为了可以手动爬取数据
 def computer(request):
     all = cs.objects.all().values()
     allchange = pd.DataFrame(all)
@@ -323,6 +324,7 @@ def manages(request):
     }
     # print(data)
     return JsonResponse(data, json_dumps_params={'ensure_ascii': False}, safe=False)
+#上面这一部分是在页面选取不同的专业然后得到不同的数据，数据在数据库中，
 def Login_view(request):
     user = request.GET.get('user', '')
     pwd = request.GET.get('pwd', '')
@@ -354,6 +356,7 @@ def register(request):
             return HttpResponse('注册失败')
     else:
         return HttpResponse('注册失败')
+#上面这两个是登录与注册功能实现
 def pagenumber(request):
     work = request.GET.get('work')
     header = {
@@ -368,7 +371,7 @@ def pagenumber(request):
     data_HTML = etree.HTML(response)
     number = data_HTML.xpath('//*[@id="__layout"]/div/div[2]/div[2]/div[1]/div[1]/div[2]/div/ul/li[8]/text()')[0]
     return JsonResponse(number,json_dumps_params={'ensure_ascii': False}, safe=False)
-
+#这个是为了获取多少页，返回前端，但是没什么用，因为我把前端这一部分功能给注释了
 class Get_data():
     def __init__(self,jok,page,work):
         self.work=work
@@ -459,7 +462,7 @@ class Get_data():
         df =pd.DataFrame(data)
         df.to_csv('./data/{}招聘信息.csv'.format(work),index=False)
         return df
-
+#这是获取数据
 
 class analysis():
     def __init__(self,data,word):
@@ -545,7 +548,7 @@ class analysis():
         w1.to_file('./static/img/{}职责.png'.format(word))
 
         return Max,Min, Mean
-
+#这个是得到数据分析，然后可视化
 
 
 def usemain(request):
@@ -595,7 +598,6 @@ def mains(num,work,page):
         return JsonResponse(ssss,json_dumps_params={'ensure_ascii': False}, safe=False)
 
     else:
-
         word = input('岗位名：')
         data = pd.read_csv('./data/{}招聘信息.csv'.format(word))
         Analysis = analysis(data,word)
@@ -605,7 +607,7 @@ def mains(num,work,page):
             'data':"error"
         }
         return JsonResponse(sssss,json_dumps_params={'ensure_ascii': False}, safe=False)
-
+#上面这两个个也是没用的，也是因为前端把这一部分功能注释了
 def imgg(request):
     n=request.GET.get("n")
     l=[]
@@ -618,3 +620,4 @@ def imgg(request):
     }
     print(data)
     return JsonResponse(data,json_dumps_params={'ensure_ascii': False}, safe=False)
+#这个是为了可以通过http的方式访问到图片

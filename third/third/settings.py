@@ -16,7 +16,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -24,8 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-j1z+=@^#=nfe1rrjp82_+##cjvxq1)k*i@55)1=(3dg1v5w!g_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+DEBUG = True,
 ALLOWED_HOSTS = ['*']
 STATIC_URL = '/static/'
 STATICFILES_DIRS =[
@@ -42,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'app'
 ]
 
@@ -55,7 +54,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+# 允许所有来源
+CORS_ALLOW_ALL_ORIGINS = True
 ROOT_URLCONF = 'third.urls'
 
 TEMPLATES = [
@@ -125,11 +125,9 @@ USE_TZ = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
-# 跨域增加忽略
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = ()
-
 CORS_ALLOW_METHODS = (
     'DELETE',
     'GET',
